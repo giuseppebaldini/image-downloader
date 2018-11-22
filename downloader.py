@@ -1,6 +1,6 @@
 #! python3
 
-# Download images from Google Images using urllib3 and Selenium
+# Download images from Google using urllib3 and Selenium [Firefox | Windows]
 
 import os
 import sys

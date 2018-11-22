@@ -1,8 +1,6 @@
 #! python3
 
-# Google Images Downloader using Selenium
-
-# Usual: Check - Comments - Readme
+# Download images from Google Images using urllib3 and Selenium
 
 import os
 import sys
@@ -10,21 +8,22 @@ import json
 import urllib3
 from selenium import webdriver
 
-# Initial arguments
-search_term = ' '.join(sys.argv[1:-1]).title()
-search_line = search_term.replace(" ","_")
+# Allow multiple search terms and create new directory name format
+search_term = ' '.join(sys.argv[1:-1])           # from first to penultimate arg
+dir_name = search_term.replace(" ","_").title()  # name format = Name_Format
 
+# Number of images to download or leave blank for default value
 try:
     num_images = int(sys.argv[-1])
 except (IndexError, ValueError):
-    num_images = 10                     # Default
+    num_images = 10                              # Default value
 
 http = urllib3.PoolManager()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Specify download path / url / extensions
+# Download path / URL / Extensions
 main_dir = r'C:\Users\Giuseppe\Documents\Images'
-download_dir = main_dir + '\\' + search_line
+download_dir = os.path.join(main_dir, dir_name)
 
 if not os.path.exists(download_dir):
     os.makedirs(download_dir)
@@ -32,7 +31,7 @@ if not os.path.exists(download_dir):
 url = 'https://www.google.com/search?tbm=isch&q=' + search_term
 extensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
 
-# Use Selenium to access Google Images
+# Use Firefox headless to operate in background
 os.environ['MOZ_HEADLESS'] = '1'
 browser = webdriver.Firefox()
 browser.get(url)
@@ -43,6 +42,7 @@ size = 0
 # Find images using XPath
 images = browser.find_elements_by_xpath('//div[contains(@class,"rg_meta")]')
 
+# Write each image in the folder while increasing counter and size
 for img in images:
 
     counter += 1
@@ -55,7 +55,7 @@ for img in images:
 
     img_req = http.request('GET', img_url, preload_content = False)
 
-    file_name = os.path.join(download_dir, search_line + str(counter) + img_ext)
+    file_name = os.path.join(download_dir, dir_name + str(counter) + img_ext)
 
     with open(file_name, 'wb') as f:
         img_file = img_req.read()
@@ -68,8 +68,8 @@ for img in images:
 
     img_req.release_conn()
 
-print('''Download completed. %d images downloaded in %s.
-Total size: %d MB.
-''' % (counter, download_dir, (size / (1024 * 1024))))
+# Final output message with number of images downloaded, path and total size
+print('Download completed.\n%d images downloaded in %s\nTotal size: %.2f MB'
+      % (counter, download_dir, (size / (1024 * 1024))))
 
 browser.quit()

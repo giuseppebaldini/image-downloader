@@ -30,7 +30,9 @@ Alternatively, if the required number is missing, the script will download a set
 
 ### Improvements
  
-I assume the limit of 100 downloads per query can be bypassed by having Selenium scroll down the search results page. 
+* **Number of pictures**: I assume the limit of 100 / query can be bypassed by having Selenium scroll down  
+* **Close windows**: display message for n seconds, then close the windows 
+* **Optional settings**: e.g. search only for transparent pictures using optional argument `-t`
 
 ### Copyright
 

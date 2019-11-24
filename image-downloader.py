@@ -22,7 +22,7 @@ http = urllib3.PoolManager()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Download path / URL / Extensions
-main_dir = r'C:\Users\Giuseppe\Documents\Images'
+main_dir = r'C:\Users\giuse\Documents\Images'
 download_dir = os.path.join(main_dir, dir_name)
 
 if not os.path.exists(download_dir):
@@ -33,7 +33,9 @@ extensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
 
 # Use Firefox headless to operate in background
 os.environ['MOZ_HEADLESS'] = '1'
-browser = webdriver.Firefox()
+# Use selenium webdriver to open Firefox
+browser = webdriver.Firefox(executable_path=r'C:\Users\giuse\geckodriver\geckodriver.exe')
+# Go to specified URL
 browser.get(url)
 
 counter = 0
